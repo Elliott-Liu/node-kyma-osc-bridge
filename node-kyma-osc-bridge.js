@@ -61,7 +61,7 @@ function readJsonFile(filePath) {
 		if (err) {
 			try {
 				console.log(`No ${filePath} exists. Attempting to create new file.`);
-				writeJsonFile(dataTemplate, filePath);
+				writeJsonFilePath(dataTemplate, filePath);
 			} catch (err) {
 				console.error(`Error reading ${fileName} file.`, err);
 			}
