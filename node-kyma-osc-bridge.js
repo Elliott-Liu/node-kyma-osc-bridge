@@ -14,6 +14,7 @@ const dataTemplate = {
 };
 
 const server = http.createServer(function (req, res) {
+	// console.log(req);
 	if (req.url === "/") {
 		serveContent(res, "./pages/index.html", "text/html");
 	} else if (req.url === "/vendor.js") {
@@ -22,6 +23,8 @@ const server = http.createServer(function (req, res) {
 		serveContent(res, "./pages/scripts/script.js", "text/javascript");
 	} else if (req.url === "/styles.css") {
 		serveContent(res, "./pages/assets/styles/styles.css", "text/css");
+	} else if (req.url === "/config/settings") {
+		serveContent(res, "./config/settings.json", "application/json");
 	}
 });
 
