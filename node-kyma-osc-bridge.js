@@ -2,6 +2,7 @@
 const http = require("http");
 const fs = require("fs");
 
+const host = "localhost";
 const port = 3000;
 
 const dataTemplate = {
@@ -11,6 +12,27 @@ const dataTemplate = {
 	remotePort: 8000,
 	metadata: true, // not sure why we need this
 };
+
+const server = http.createServer(function (req, res) {
+	if (req.url === "/") {
+		serveContent(res, "./pages/index.html", "text/html");
+	} else if (req.url === "/vendor.js") {
+		serveContent(res, "./pages/scripts/vendor.js", "text/javascript");
+	} else if (req.url === "/script.js") {
+		serveContent(res, "./pages/scripts/script.js", "text/javascript");
+	} else if (req.url === "/styles.css") {
+		serveContent(res, "./pages/assets/styles/styles.css", "text/css");
+	}
+});
+
+server.listen(port, host, function (err) {
+	if (err) {
+		console.log("Something went wrong.", err);
+	} else {
+		console.log(`Server is running on http://${host}:${port}`);
+		readJsonFile("./config/settings.json");
+	}
+});
 
 function readJsonFile(filePath) {
 	let pathArray = filePath.split("/");
@@ -83,27 +105,23 @@ function createFolderPath(folderPath) {
 	return folderExists;
 }
 
-const server = http.createServer(function (req, res) {
-	res.writeHead(200, { "Content-Type": "text/html" });
-	fs.readFile("./pages/index.html", function (error, data) {
-		if (error) {
+function serveContent(
+	res = new http.ServerResponse(),
+	filePath = new String(),
+	contentType = new String()
+) {
+	res.setHeader("Content-Type", contentType);
+	fs.readFile(filePath, function (err, data) {
+		if (err) {
 			res.writeHead(404);
 			res.write("Error: File Not Found.");
 		} else {
+			res.writeHead(200);
 			res.write(data);
 		}
 		res.end();
 	});
-});
-
-server.listen(port, function (error) {
-	if (error) {
-		console.log("Something went wrong.", error);
-	} else {
-		console.log("Server is listening on port: http://localhost:" + port);
-		readJsonFile("./config/settings.json");
-	}
-});
+}
 
 if (!Array.prototype.last) {
 	Array.prototype.last = function () {
