@@ -1,6 +1,7 @@
 // Import Dependencies
 const http = require("http");
 const fs = require("fs");
+const { parse } = require("querystring");
 
 const host = "localhost";
 const port = 3000;
@@ -14,17 +15,18 @@ const dataTemplate = {
 };
 
 const server = http.createServer(function (req, res) {
-	// console.log(req);
 	if (req.url === "/") {
 		serveContent(res, "./pages/index.html", "text/html");
-	} else if (req.url === "/vendor.js") {
+	} else if (req.url === "/vendor.js" && req.method === "GET") {
 		serveContent(res, "./pages/scripts/vendor.js", "text/javascript");
-	} else if (req.url === "/script.js") {
+	} else if (req.url === "/script.js" && req.method === "GET") {
 		serveContent(res, "./pages/scripts/script.js", "text/javascript");
-	} else if (req.url === "/styles.css") {
+	} else if (req.url === "/styles.css" && req.method === "GET") {
 		serveContent(res, "./pages/assets/styles/styles.css", "text/css");
-	} else if (req.url === "/config/settings") {
+	} else if (req.url === "/config/settings" && req.method === "GET") {
 		serveContent(res, "./config/settings.json", "application/json");
+	} else if (req.url === "/config/settings" && req.method === "POST") {
+		parseWritePostMessage(req, writeJsonFile, "./config/settings.json");
 	}
 });
 
@@ -37,6 +39,20 @@ server.listen(port, host, function (err) {
 	}
 });
 
+function parseWritePostMessage(req, writeJsonFileFunction, path) {
+	// console.log(req);
+	let body;
+	req.on("data", (buffer) => {
+		body = buffer.toString(); // convert buffer to string
+	});
+	req.on("end", () => {
+		body = JSON.parse(body);
+		// req.end();
+		if (writeJsonFileFunction !== null) {
+			writeJsonFileFunction(body, path);
+		}
+	});
+}
 function readJsonFile(filePath) {
 	let pathArray = filePath.split("/");
 	const fileName = pathArray.pop();
@@ -44,15 +60,15 @@ function readJsonFile(filePath) {
 	fs.readFile(filePath, "utf-8", (err, jsonString) => {
 		if (err) {
 			try {
-				console.log(`No ${fileName} exists, attempting to creating new file.`);
-				writeJsonFile(filePath, dataTemplate);
+				console.log(`No ${filePath} exists. Attempting to create new file.`);
+				writeJsonFile(dataTemplate, filePath);
 			} catch (err) {
 				console.error(`Error reading ${fileName} file.`, err);
 			}
 		} else {
 			try {
 				const data = JSON.parse(jsonString);
-				console.log(data);
+				// console.log(data);
 			} catch (err) {
 				console.error("Error parsing JSON.", err);
 			}
@@ -60,52 +76,56 @@ function readJsonFile(filePath) {
 	});
 }
 
-function writeFile(data, filePath) {
-	let pathArray = filePath.split("/");
-	const fileName = pathArray.pop();
-	const folderPath = pathArray.join("/");
-	let folderExists = createFolderPath(folderPath);
-	console.log({ folderExists });
-	if (folderExists) {
-		fs.writeFile(filePath, data, (err) => {
-			if (err) {
-				console.error(
-					`Failed to create ${fileName} file at ${folderPath}/.`,
-					err
-				);
-			} else {
-				console.log(`Successfully created ${fileName} file at ${folderPath}/.`);
-			}
-		});
-	} else console.log("Nope!");
-}
-
-function writeJsonFile(filePath, jsonData) {
+function writeJsonFile(jsonData, filePath) {
 	writeFile(JSON.stringify(jsonData, null, 2), filePath);
 }
 
-function createFolderPath(folderPath) {
-	let folderExists = true; // FIX
-	const exists = (boolean) => {
-		folderExists = boolean;
-	};
-	fs.access(folderPath, (err) => {
+function writeJsonFilePath(jsonData, filePath) {
+	writeFilePath(JSON.stringify(jsonData, null, 2), filePath);
+}
+
+async function writeFilePath(data, filePath) {
+	let pathArray = filePath.split("/");
+	const fileName = pathArray.pop();
+	const folderPath = pathArray.join("/");
+	let status = await fs.promises
+		.access(folderPath, fs.constants.F_OK)
+		.then(() => {
+			console.log(`The directory ${folderPath}/ already exists.`);
+		})
+		.catch((err) => {
+			if (err) {
+				console.log("Directory does not exist.");
+				console.log(`Attempting to create new ${folderPath} directory.`);
+				makeDirectory(folderPath)
+					.then((res) => {
+						if (folderPath === res) {
+							console.log(`Successfully created ${folderPath} directory.`);
+							writeFile(data, filePath);
+						}
+					})
+					.catch((err) => {
+						console.error(`Failed to create ${folderPath} directory.`, err);
+					});
+			}
+		});
+	return status;
+}
+
+function writeFile(data, filePath) {
+	fs.writeFile(filePath, data, (err) => {
 		if (err) {
-			console.log(
-				`Folder directory does not exist. Attempting to create new ${folderPath} directory.`
-			);
-			fs.mkdir(folderPath, { recursive: true }, (err) => {
-				if (err) {
-					console.error(`Failed to create ${folderPath} directory.`, err);
-				} else {
-					console.log(`Successfully created ${folderPath} directory.`);
-				}
-			});
+			console.error(`Failed to write data to ${filePath} file.`, err);
 		} else {
-			// console.log(`The directory ${folderPath}/ already exists.`);
+			console.log(`Successfully written data to ${filePath} file.`);
 		}
 	});
-	return folderExists;
+}
+
+async function makeDirectory(folderPath) {
+	return await fs.promises.mkdir(folderPath, { recursive: true }, (err) =>
+		console.error(`Failed to create ${folderPath}/ directory.`, err)
+	);
 }
 
 function serveContent(

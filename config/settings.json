@@ -1,7 +1,6 @@
 {
-  "localAddress": "192.168.0.200",
-  "localPort": 9000,
+  "localAddress": "192.168.0.201",
+  "localPort": "9000",
   "remoteAddress": "192.168.0.183",
-  "remotePort": 8000,
-  "metadata": true
+  "remotePort": "8000"
 }

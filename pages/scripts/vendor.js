@@ -38,10 +38,10 @@ function postResponse(event) {
 		}
 	}
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "/");
+	xhr.open("POST", "/config/settings");
 	xhr.setRequestHeader("Content-Type", "application/json");
 	// console.log(payload);
-	let payloadString = JSON.stringify(payload, null, 2);
+	let payloadString = JSON.stringify(payload);
 	// console.log(payloadString);
 	xhr.send(payloadString);
 }
