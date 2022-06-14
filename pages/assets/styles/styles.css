@@ -1,0 +1,178 @@
+:root {
+  --color-primary: #F95738;
+  --color-secondary: #FCE811;
+  --color-tertiary: #B6330F;
+  --color-text: #E2E1DC;
+  --color-background: #1E1D22;
+  --color-heading: #F95738;
+  --color-button: rgba(255, 255, 255, 0.75);
+  --font-brand: "Futura", "Trebuchet MS", Arial, sans-serif;
+  --font-content: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  --global-margin: 1.5rem;
+}
+
+body {
+  display: grid;
+  margin: 0;
+  font-family: var(--font-content);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  font-weight: 500;
+  border: 1px sold red;
+}
+
+h1 {
+  color: var(--color-heading);
+  font-family: var(--font-brand);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  color: var(--color-secondary);
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  color: var(--color-primary);
+  text-decoration-color: var(--color-primary);
+}
+
+p,
+input,
+label {
+  margin: 0.5rem;
+  font-family: var(--font-content);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* LOGO STYLING */
+.logo {
+  color: var(--color-primary);
+  font-family: var(--font-brand);
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* NAVIGATION BAR STYLING STARTS HERE */
+header,
+footer {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  height: 7.5vh;
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  margin: var(--global-margin);
+}
+
+.nav-main,
+.nav-secondary {
+  font-weight: 600;
+  display: flex;
+  justify-content: flex-end;
+  list-style-type: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-main__item,
+.nav-secondary__item {
+  color: var(--color-text);
+  padding: 1rem;
+  white-space: nowrap;
+}
+
+.navbar .left {
+  margin-right: auto;
+}
+
+.navbar .logo {
+  margin: 0;
+  padding: 0 1rem 0 1rem;
+  line-height: 0;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+/* MAIN STYLING STARTS HERE */
+main {
+  margin: var(--global-margin);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* HERO STYLING */
+main .hero {
+  padding: var(--global-margin);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+/* FOOTER STYLING STARTS HERE */
+.nav-secondary {
+  justify-content: center;
+}
+
+/* COMBO STYLING */
+.center {
+  text-align: center;
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-secondary {
+  color: var(--color-secondary);
+}
+
+.color-tertiary {
+  color: var(--color-tertiary);
+}
+
+.color-heading {
+  color: var(--color-heading);
+}
+
+.color-text {
+  color: var(--color-text);
+}
+
+.color-background {
+  color: var(--color-background);
+}
