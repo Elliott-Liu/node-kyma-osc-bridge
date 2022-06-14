@@ -4,29 +4,64 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Kyma OSC Server: Configuration</title>
+    <link rel="shortcut icon" href="#" />
+		<title>Kyma OSC Bridge</title>
+		<link rel="stylesheet" href="styles.css"></link>
+    <script defer src="vendor.js"></script>
+    <script defer src="script.js"></script>
 	</head>
 	<body>
-		<h1>Kyma-OSC Server</h1>
-    <h2>Configuration</h2>
-    <form id="settingsForm">
-      <div id="parameterParent">
-        <label for="localAddress">Local IP Address</label>
-        <input id="localAddress" type="text"></input>
-      </div>
-      <div id="parameterParent">
-        <label for="localPort">Local Port</label>
-        <input id="localPort" type="text"></input>
-      </div>
-      <div id="parameterParent">
-        <label for="remoteAddress">Remote IP Address</label>
-        <input id="remoteAddress" type="text"></input>
-      </div>
-      <div id="parameterParent">
-        <label for="remotePort">Remote Port</label>
-        <input id="remotePort" type="text"></input>
-      </div>
-      <input type="submit"></input>
-    </form>
+    <!-- HEADER -->
+    <header>
+      <nav class="navbar">
+        <h1 class="logo">Kyma OSC Bridge</h1>
+      </nav>
+    </header>
+
+    <!-- MAIN -->
+    <main class="index">
+      <section class="hero">
+        <h2 class="title">Configuration</h2>
+        <form id="ipSettingsForm" method="post">
+          <div id="parameterParent">
+            <label for="localAddress">Local IP Address</label>
+            <br>
+            <input id="localAddress" type="text" name="localAddress"></input>
+          </div>
+          <div id="parameterParent">
+            <label for="localPort">Local Port</label>
+            <br>
+            <input id="localPort" type="text" name="localPort"></input>
+          </div>
+          <div id="parameterParent">
+            <label for="remoteAddress">Remote IP Address</label>
+            <br>
+            <input id="remoteAddress" type="text" name="remoteAddress"></input>
+          </div>
+          <div id="parameterParent">
+            <label for="remotePort">Remote Port</label>
+            <br>
+            <input id="remotePort" type="text" name="remotePort"></input>
+          </div>
+          <input type="submit" value="Submit"></input>
+        </form>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      
+      <ul class="nav-secondary">
+        <li class="nav-secondary__item">
+          <p>Elliott Liu</p>
+        </li>
+        <li class="nav-secondary__item">
+          <p>Charlie Norton</p>
+        </li>
+        <li class="nav-secondary__item">
+          <p>2022</p>
+        </li>
+      </ul>
+    </footer>
 	</body>
 </html>
