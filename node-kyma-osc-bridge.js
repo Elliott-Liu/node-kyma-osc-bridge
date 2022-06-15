@@ -26,7 +26,7 @@ const server = http.createServer(function (req, res) {
 	} else if (req.url === "/config/settings" && req.method === "GET") {
 		serveContent(res, "./config/settings.json", "application/json");
 	} else if (req.url === "/config/settings" && req.method === "POST") {
-		parseWritePostMessage(req, writeJsonFile, "./config/settings.json");
+		parseWritePostMessage(req, res, writeJsonFile, "./config/settings.json");
 	}
 });
 
@@ -39,18 +39,17 @@ server.listen(port, host, function (err) {
 	}
 });
 
-function parseWritePostMessage(req, writeJsonFileFunction, path) {
-	// console.log(req);
+function parseWritePostMessage(req, res, writeJsonFileFunction, path) {
 	let body;
 	req.on("data", (buffer) => {
 		body = buffer.toString(); // convert buffer to string
 	});
 	req.on("end", () => {
 		body = JSON.parse(body);
-		// req.end();
 		if (writeJsonFileFunction !== null) {
 			writeJsonFileFunction(body, path);
 		}
+		res.end();
 	});
 }
 function readJsonFile(filePath) {
